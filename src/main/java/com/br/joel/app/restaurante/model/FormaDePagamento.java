@@ -1,25 +1,21 @@
 package com.br.joel.app.restaurante.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Data
-@AllArgsConstructor
+@Table
 @NoArgsConstructor
-@Table()
-public class Cozinha {
-
+@AllArgsConstructor
+public class FormaDePagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "nome")
-    private String nome;
-
-
+    private  long id;
+    @Column(nullable = false)
+    private String descricao;
 }
