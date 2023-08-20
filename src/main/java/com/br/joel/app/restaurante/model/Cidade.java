@@ -5,21 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity()
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table()
-public class Cozinha {
-
+public class Cidade {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "nome")
-    private String nome;
-
-
+    private  String nome;
 }

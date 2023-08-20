@@ -4,22 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity()
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table()
-public class Cozinha {
-
+public class Estado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "nome")
-    private String nome;
-
-
+    private  Long id;
+    private  String nome;
 }
