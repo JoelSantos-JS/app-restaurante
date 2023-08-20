@@ -6,14 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity()
+@Entity(name = "cidades")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table()
+@Table(name = "cidades" )
 public class Cidade {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
     private  String nome;
+
+    @ManyToOne()
+    private  Estado estado;
 }
