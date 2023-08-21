@@ -1,5 +1,6 @@
 package com.br.joel.app.restaurante.services;
 
+import com.br.joel.app.restaurante.exceptions.EntindadeEmUsoException;
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.repository.CozinhaRepository;
 import com.br.joel.app.restaurante.services.IMPL.CozinhaImpl;
@@ -53,8 +54,8 @@ public class CozinhaServices implements CozinhaImpl {
     public void remover(Long id) {
    try {
         cz.deleteById(id);
-   }catch (DataIntegrityViolationException e) {
-       throw new DataIntegrityViolationException("Não é possível excluir uma cozinha que possui produtos");
+   }catch (Exception e) {
+       throw new EntindadeEmUsoException("Não é possível excluir uma cozinha que possui produtos");
    }
 
     }
