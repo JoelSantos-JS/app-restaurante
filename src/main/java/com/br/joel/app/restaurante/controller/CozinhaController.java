@@ -3,6 +3,7 @@ package com.br.joel.app.restaurante.controller;
 
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.repository.CozinhaRepository;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +24,14 @@ public class CozinhaController {
         this.cozinhaRepository = cozinhaRepository;
     }
 
-    @GetMapping()
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 
     public List<Cozinha> getAll() {
         return  cozinhaRepository.findAll();
+    }
+
+    @GetMapping(value = "/{id}")
+    public  Cozinha buscarPorId(Long id) {
+        return  cozinhaRepository.findById(id).get();
     }
 }
