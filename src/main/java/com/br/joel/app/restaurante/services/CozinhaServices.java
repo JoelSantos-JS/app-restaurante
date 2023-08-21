@@ -1,5 +1,6 @@
 package com.br.joel.app.restaurante.services;
 
+import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
 import com.br.joel.app.restaurante.exceptions.EntindadeEmUsoException;
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.repository.CozinhaRepository;
@@ -29,7 +30,13 @@ public class CozinhaServices implements CozinhaImpl {
     @Override
     @Transactional(readOnly = true)
     public Cozinha buscar(Long id) {
-        return cz.findById(id).get();
+
+        try {
+        return      cz.findById(id).get();
+        }catch (Exception e) {
+           throw  new EntidadeNaoEncontradaException("Cozinha não encontrada");
+        }
+
     }
 
     @Override
