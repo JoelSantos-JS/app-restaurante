@@ -3,20 +3,24 @@ package com.br.joel.app.restaurante.services;
 import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.model.Restaurante;
+import com.br.joel.app.restaurante.repository.CozinhaRepository;
 import com.br.joel.app.restaurante.repository.RestauranteRepository;
 import com.br.joel.app.restaurante.services.IMPL.RestauranteImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 @Service
 public class RestauranteServices implements RestauranteImpl {
 
     private  final RestauranteRepository repository;
+    private  final CozinhaServices  cozinhaServices;
 
-    public RestauranteServices(RestauranteRepository repository) {
+    public RestauranteServices(RestauranteRepository repository, CozinhaServices cozinhaServices) {
         this.repository = repository;
 
+        this.cozinhaServices = cozinhaServices;
     }
     @Override
     public List<Restaurante> listar() {
@@ -36,6 +40,16 @@ public class RestauranteServices implements RestauranteImpl {
 
     @Override
     public Restaurante salvar(Restaurante restaurante) {
+            Long id = restaurante.getCozinha().getId();
+        Cozinha cozinha = cozinhaServices.buscar(id);
+
+        if(cozinha == null ){
+            throw new EntidadeNaoEncontradaException("Cozinha não encontrada");
+        }
+        restaurante.setCozinha(cozinha);
+        restaurante.setAtivo(true);
+        restaurante.setDataAtualizacao(Instant.now());
+        restaurante.setDataCadastro(Instant.now());
         return repository.save(restaurante);
     }
 

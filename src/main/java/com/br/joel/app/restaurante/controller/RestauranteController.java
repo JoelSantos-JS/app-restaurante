@@ -1,5 +1,6 @@
 package com.br.joel.app.restaurante.controller;
 
+import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
 import com.br.joel.app.restaurante.model.Restaurante;
 import com.br.joel.app.restaurante.services.RestauranteServices;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,12 @@ public class RestauranteController {
 
 
     @PostMapping
-    public ResponseEntity<Restaurante> adicionar(@RequestBody Restaurante restaurante) {
-        return  ResponseEntity.ok().body(restauranteServices.salvar(restaurante));
+    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
+        try {
+            return  ResponseEntity.ok().body(restauranteServices.salvar(restaurante));
+        }catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

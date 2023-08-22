@@ -1,6 +1,7 @@
 package com.br.joel.app.restaurante.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,12 @@ public class Restaurante {
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
+    @JsonIgnore
     private Instant  dataCadastro;
+    @JsonIgnore
     private Instant  dataAtualizacao;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "cozinha_id")
     private  Cozinha cozinha;
 
