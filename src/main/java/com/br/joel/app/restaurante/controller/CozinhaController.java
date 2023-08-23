@@ -43,6 +43,11 @@ public class CozinhaController {
         return  ResponseEntity.ok().body(anId);
     }
 
+    @GetMapping(value = "/search")
+    public  ResponseEntity<List<Cozinha>> buscarPorNome(@RequestParam(value = "nome", required = false) String nome) {
+        return ResponseEntity.ok().body(cozinhaServices.buscarPorNome(nome));
+    }
+
 
     @PostMapping
     public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {

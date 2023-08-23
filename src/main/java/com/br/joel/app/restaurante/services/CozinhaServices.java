@@ -29,6 +29,12 @@ public class CozinhaServices implements CozinhaImpl {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Cozinha> buscarPorNome(String nome) {
+        return cz.findByNomeContaining(nome);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Cozinha buscar(Long id) {
 
         try {
@@ -38,6 +44,8 @@ public class CozinhaServices implements CozinhaImpl {
         }
 
     }
+
+
 
     @Override
     @Transactional
