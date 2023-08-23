@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -34,8 +36,12 @@ public class Restaurante {
     private Instant  dataAtualizacao;
 
     @ManyToOne
-    @JoinColumn(name = "cozinha_id")
+    @JoinColumn(name = "cozinha_id", nullable = false)
     private  Cozinha cozinha;
+
+    @ManyToMany
+    @JoinTable(name = "restaurante_forma_pagamento")
+    private List<FormaDePagamento> formaDePagamentos= new ArrayList<>();
 
 
     public  Restaurante(final Long id ,  final String nome, final  Boolean ativo , final  BigDecimal taxaFrete , Cozinha cozinha  ){
