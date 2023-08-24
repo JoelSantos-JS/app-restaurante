@@ -35,7 +35,7 @@ public class RestauranteServices implements RestauranteImpl {
 
     @Override
     public Restaurante buscar(Long id) {
-        return null;
+        return repository.findById(id).orElse(null);
     }
 
     @Override
@@ -57,9 +57,11 @@ public class RestauranteServices implements RestauranteImpl {
     public Restaurante atualizar(Long id, Restaurante restaurante) {
         Restaurante restaurante1  = buscar(id);
 
-        if (restaurante1 != null) {
-            BeanUtils.copyProperties(restaurante, restaurante1, "id");
+        if (restaurante1 == null) {
+            throw  new EntidadeNaoEncontradaException("Restaurante não encontrado");
         }
+        BeanUtils.copyProperties(restaurante, restaurante1, "id", "formaDePagamentos","endereco");
+        repository.save(restaurante1);
         return restaurante1;
     }
 
