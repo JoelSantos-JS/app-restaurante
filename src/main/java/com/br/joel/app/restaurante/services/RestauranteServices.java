@@ -48,8 +48,7 @@ public class RestauranteServices implements RestauranteImpl {
         }
         restaurante.setCozinha(cozinha);
         restaurante.setAtivo(true);
-        restaurante.setDataAtualizacao(Instant.now());
-        restaurante.setDataCadastro(Instant.now());
+
         return repository.save(restaurante);
     }
 
@@ -60,7 +59,7 @@ public class RestauranteServices implements RestauranteImpl {
         if (restaurante1 == null) {
             throw  new EntidadeNaoEncontradaException("Restaurante não encontrado");
         }
-        BeanUtils.copyProperties(restaurante, restaurante1, "id", "formaDePagamentos","endereco");
+        BeanUtils.copyProperties(restaurante, restaurante1, "id", "formaDePagamentos","endereco","dataCadastro");
         repository.save(restaurante1);
         return restaurante1;
     }

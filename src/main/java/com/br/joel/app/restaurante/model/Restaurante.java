@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -31,8 +33,10 @@ public class Restaurante {
     private BigDecimal taxaFrete;
 
     @JsonIgnore
+    @CreationTimestamp
     private Instant  dataCadastro;
     @JsonIgnore
+    @UpdateTimestamp
     private Instant  dataAtualizacao;
 
     @ManyToOne
@@ -47,6 +51,9 @@ public class Restaurante {
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn  (name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaDePagamento> formaDePagamentos= new ArrayList<>();
+
+    @OneToMany(mappedBy = "restaurante")
+    private  List<Produto> produtos = new ArrayList<>();
 
 
     public  Restaurante(final Long id ,  final String nome, final  Boolean ativo , final  BigDecimal taxaFrete , Cozinha cozinha  ){
