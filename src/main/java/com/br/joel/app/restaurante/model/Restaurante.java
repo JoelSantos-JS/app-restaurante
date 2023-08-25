@@ -39,7 +39,7 @@ public class Restaurante {
     @UpdateTimestamp
     private Instant  dataAtualizacao;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "cozinha_id", nullable = false)
     private  Cozinha cozinha;
 
@@ -53,6 +53,7 @@ public class Restaurante {
     private List<FormaDePagamento> formaDePagamentos= new ArrayList<>();
 
     @OneToMany(mappedBy = "restaurante")
+    @JsonIgnore
     private  List<Produto> produtos = new ArrayList<>();
 
 

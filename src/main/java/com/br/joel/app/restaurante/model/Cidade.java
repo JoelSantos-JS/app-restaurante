@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.FetchType;
 
 @Entity(name = "cidades")
 @Data
@@ -17,6 +18,6 @@ public class Cidade {
     private Long id;
     private  String nome;
 
-    @ManyToOne()
+    @ManyToOne
     private  Estado estado;
 }
