@@ -5,6 +5,7 @@ import com.br.joel.app.restaurante.model.Cidade;
 import com.br.joel.app.restaurante.repository.CidadeRepository;
 import com.br.joel.app.restaurante.services.IMPL.CidadeImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class CidadeServices implements CidadeImpl {
 
     @Override
     public Cidade buscar(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Não foi possível encontrar a cidade"));
+        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST  ,"Não foi possível encontrar a cidade"));
     }
 
     @Override
@@ -35,7 +36,7 @@ public class CidadeServices implements CidadeImpl {
         final  var anId= cozinha.getEstado().getId();
         final var estado1 =estadoServices.buscar(anId);
         if(anId == null) {
-            throw new EntidadeNaoEncontradaException("Não foi possível encontrar o estado");
+            throw new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST , "Não foi possível encontrar o estado");
         }
 
         cozinha.setEstado(estado1);

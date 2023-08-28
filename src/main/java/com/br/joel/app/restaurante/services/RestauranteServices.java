@@ -7,6 +7,7 @@ import com.br.joel.app.restaurante.repository.CozinhaRepository;
 import com.br.joel.app.restaurante.repository.RestauranteRepository;
 import com.br.joel.app.restaurante.services.IMPL.RestauranteImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -28,7 +29,7 @@ public class RestauranteServices implements RestauranteImpl {
         try {
             return repository.findAll();
         }catch (Exception e) {
-            throw  new EntidadeNaoEncontradaException("Não foi possível encontrar os restaurantes");
+            throw  new EntidadeNaoEncontradaException ( HttpStatus.BAD_REQUEST , "Não foi possível encontrar os restaurantes");
         }
 
     }
@@ -44,7 +45,7 @@ public class RestauranteServices implements RestauranteImpl {
         Cozinha cozinha = cozinhaServices.buscar(id);
 
         if(cozinha == null ){
-            throw new EntidadeNaoEncontradaException("Cozinha não encontrada");
+            throw new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST  ,"Cozinha não encontrada");
         }
         restaurante.setCozinha(cozinha);
         restaurante.setAtivo(true);
@@ -54,13 +55,17 @@ public class RestauranteServices implements RestauranteImpl {
 
     @Override
     public Restaurante atualizar(Long id, Restaurante restaurante) {
+
         Restaurante restaurante1  = buscar(id);
 
-        if (restaurante1 == null) {
-            throw  new EntidadeNaoEncontradaException("Restaurante não encontrado");
+        try {
+
+            BeanUtils.copyProperties(restaurante, restaurante1, "id", "formaDePagamentos","endereco","dataCadastro");
+            repository.save(restaurante1);
+        }catch (Exception e) {
+            throw  new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST , "Restaurante não encontrado");
         }
-        BeanUtils.copyProperties(restaurante, restaurante1, "id", "formaDePagamentos","endereco","dataCadastro");
-        repository.save(restaurante1);
+
         return restaurante1;
     }
 

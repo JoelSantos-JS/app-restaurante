@@ -5,6 +5,7 @@ import com.br.joel.app.restaurante.model.Estado;
 import com.br.joel.app.restaurante.repository.EstadoRepository;
 import com.br.joel.app.restaurante.services.IMPL.EstadoImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ public class EstadoServices implements EstadoImpl {
     @Override
     @Transactional(readOnly = true)
     public Estado buscar(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Estado não encontrado"));
+        return repository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST ,  "Estado não encontrado"));
     }
 
     @Override

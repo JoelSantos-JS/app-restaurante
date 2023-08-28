@@ -7,6 +7,7 @@ import com.br.joel.app.restaurante.repository.CozinhaRepository;
 import com.br.joel.app.restaurante.services.IMPL.CozinhaImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +41,7 @@ public class CozinhaServices implements CozinhaImpl {
         try {
         return      cz.findById(id).get();
         }catch (Exception e) {
-           throw  new EntidadeNaoEncontradaException("Cozinha não encontrada");
+           throw  new EntidadeNaoEncontradaException(  HttpStatus.BAD_REQUEST ,"Cozinha não encontrada");
         }
 
     }

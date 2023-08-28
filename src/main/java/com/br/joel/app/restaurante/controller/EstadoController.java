@@ -6,6 +6,7 @@ import com.br.joel.app.restaurante.services.EstadoServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/estados")
@@ -32,7 +33,7 @@ public class EstadoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Estado estado) {
+    public ResponseEntity<?> adicionar(@RequestBody @Valid Estado estado) {
         try {
             return ResponseEntity.ok().body(estadoServices.salvar(estado));
         }catch (EntidadeNaoEncontradaException e) {

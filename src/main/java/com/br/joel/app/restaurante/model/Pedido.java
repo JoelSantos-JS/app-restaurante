@@ -39,12 +39,13 @@ public class Pedido {
 
     @ManyToOne()
     private  Restaurante restaurante;
+
     @ManyToOne()
     private  Usuario usuario;
+
     @OneToMany(mappedBy = "pedido")
     private  List<FormaDePagamento> formaDePagamentos = new ArrayList<>();
 
-    private List<ItemPedido> itens;
 
 
 }

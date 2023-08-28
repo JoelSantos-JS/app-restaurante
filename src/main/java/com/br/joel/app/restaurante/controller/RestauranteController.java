@@ -6,6 +6,7 @@ import com.br.joel.app.restaurante.services.RestauranteServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,7 @@ public class RestauranteController {
 
 
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
+    public ResponseEntity<?> adicionar(@RequestBody @Valid Restaurante restaurante) {
         try {
             return  ResponseEntity.ok().body(restauranteServices.salvar(restaurante));
         }catch (EntidadeNaoEncontradaException e) {
