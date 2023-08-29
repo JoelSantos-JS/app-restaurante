@@ -1,6 +1,7 @@
 package com.br.joel.app.restaurante.model;
 
 
+import com.br.joel.app.restaurante.Validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -27,10 +32,14 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotEmpty(message = "Nome do restaurante não pode ser vazio")
+    @NotNull(message = "Nome do restaurante não pode ser nulo" )
     @Column(nullable = false)
     private  String nome;
     private  boolean ativo;
+
+    @DecimalMin("0")
+    @TaxaFrete(message = "Taxa tem que ser maior que 0")
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
@@ -41,6 +50,7 @@ public class Restaurante {
     @UpdateTimestamp
     private Instant  dataAtualizacao;
 
+    @Valid
     @ManyToOne()
     @JoinColumn(name = "cozinha_id", nullable = false)
     private  Cozinha cozinha;
