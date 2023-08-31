@@ -2,6 +2,7 @@ package com.br.joel.app.restaurante.services;
 
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.repository.CozinhaRepository;
+import com.br.joel.app.restaurante.repository.RestauranteRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
@@ -13,7 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
 import static io.restassured.RestAssured.given;
@@ -28,12 +31,19 @@ class CozinhaServicesTestIT {
     @Autowired
     private  CozinhaRepository cozinhaRepository;
 
+    @Autowired
+    private RestauranteRepository repository;
+
+
+    @Autowired
+    private EntityManager entityManager;
+
     @BeforeEach
     public void setUp(){
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
-
+            delete_and_create();
     }
         @Test
     public  void  should_return_200_when_make_request(){
@@ -53,12 +63,17 @@ class CozinhaServicesTestIT {
          }
    @Test
         public  void  should_return_badRequest_when_consult_by_id(){
-                given().pathParams("id",10).when().get("/{id}").then().statusCode(HttpStatus.BAD_REQUEST.value());
+                given().pathParams("id",20).when().get("/{id}").then().statusCode(HttpStatus.BAD_REQUEST.value());
          }
 
 
+
+
+
+
+
          public  void  delete_and_create() {
-            cozinhaRepository.deleteAll();
+
              Cozinha cozinha = new Cozinha();
              cozinha.setNome("Brasileira");
              cozinhaRepository.save(cozinha);

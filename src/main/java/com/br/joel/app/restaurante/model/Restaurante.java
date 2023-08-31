@@ -3,11 +3,13 @@ package com.br.joel.app.restaurante.model;
 
 import com.br.joel.app.restaurante.Validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +45,16 @@ public class Restaurante {
     @TaxaFrete(message = "Taxa tem que ser maior que 0")
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
-
-    @JsonIgnore
+        @JsonIgnore
     @CreationTimestamp
-    private Instant  dataCadastro;
-    @JsonIgnore
-    @UpdateTimestamp
-    private Instant  dataAtualizacao;
+    private Instant  dataCadastro ;
+      @JsonIgnore
+    @UpdateTimestamp()
+    private Instant  dataAtualizacao ;
 
     @Valid
     @ManyToOne()
+    @JsonIgnoreProperties(value = "nome", allowGetters = true, allowSetters= true)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private  Cozinha cozinha;
 
