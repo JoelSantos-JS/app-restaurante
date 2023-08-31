@@ -22,7 +22,7 @@ public class Cozinha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
+
     private Long id;
     @Column(nullable = false)
     private String nome;

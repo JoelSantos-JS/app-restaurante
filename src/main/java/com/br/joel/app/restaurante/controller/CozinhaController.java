@@ -27,7 +27,6 @@ public class CozinhaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-
     public ResponseEntity<List<Cozinha>> getAll() {
         final  var find = cozinhaServices.listar();
         return  ResponseEntity.ok().body(find);
