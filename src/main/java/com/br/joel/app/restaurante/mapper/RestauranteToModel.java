@@ -5,43 +5,37 @@ import com.br.joel.app.restaurante.DTO.RestauranteDTO;
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.model.Restaurante;
 import com.br.joel.app.restaurante.model.input.RestauranteInput;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class RestauranteToModel {
 
 
-    public  static RestauranteDTO toModel(Restaurante restaurante) {
-        CozinhaDTO cozinhaDTO = new CozinhaDTO();
-        cozinhaDTO.setId(restaurante.getCozinha().getId());
-        cozinhaDTO.setNome(restaurante.getCozinha().getNome());
+    @Autowired
+    private  ModelMapper  modelMapper;
 
-        RestauranteDTO restauranteDTO = new RestauranteDTO();
-        restauranteDTO.setId(restaurante.getId());
-        restauranteDTO.setNome(restaurante.getNome());
-        restauranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-        restauranteDTO.setCozinha(cozinhaDTO);
 
-        return  restauranteDTO;
+    public    RestauranteDTO toModel(Restaurante restaurante) {
+
+        return modelMapper.map(restaurante,RestauranteDTO.class);
     }
 
-    public static List<RestauranteDTO> toModel(List<Restaurante> restaurantes) {
+    public  List<RestauranteDTO> toModel(List<Restaurante> restaurantes) {
         return restaurantes.stream().map(e -> toModel(e)).toList();
     }
 
 
-    public  static Restaurante  toEntity(RestauranteInput input) {
+    public   Restaurante  toEntity(RestauranteInput input) {
 
-        Restaurante   restaurante = new Restaurante();
-        restaurante.setNome(input.getNome());
 
-        restaurante.setTaxaFrete(input.getTaxaFrete());
+        return modelMapper.map(input,Restaurante.class);
+    }
 
-        Cozinha cozinha = new Cozinha();
-        cozinha.setId(input.getCozinha().getId());
-
-        restaurante.setCozinha(cozinha);
-        return restaurante;
+    public  void  copyToEntity(Restaurante restaurante1, Restaurante restaurante) {
+        modelMapper.map(restaurante,restaurante);
     }
 
 

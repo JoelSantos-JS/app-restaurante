@@ -1,16 +1,17 @@
 package com.br.joel.app.restaurante.services;
 
 import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
+import com.br.joel.app.restaurante.mapper.RestauranteToModel;
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.model.Restaurante;
-import com.br.joel.app.restaurante.repository.CozinhaRepository;
 import com.br.joel.app.restaurante.repository.RestauranteRepository;
 import com.br.joel.app.restaurante.services.IMPL.RestauranteImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 @Service
 public class RestauranteServices implements RestauranteImpl {
@@ -18,10 +19,14 @@ public class RestauranteServices implements RestauranteImpl {
     private  final RestauranteRepository repository;
     private  final CozinhaServices  cozinhaServices;
 
-    public RestauranteServices(RestauranteRepository repository, CozinhaServices cozinhaServices) {
+
+    private  final RestauranteToModel model;
+
+    public RestauranteServices(RestauranteRepository repository, CozinhaServices cozinhaServices, RestauranteToModel model) {
         this.repository = repository;
 
         this.cozinhaServices = cozinhaServices;
+        this.model = model;
     }
     @Override
     public List<Restaurante> listar() {
@@ -70,7 +75,16 @@ public class RestauranteServices implements RestauranteImpl {
     }
 
     @Override
+    @Transactional()
     public void remover(Long id) {
-        repository.deleteById(id);
+
+        try {
+
+            repository.deleteById(id);
+            repository.flush();
+        }catch (DataIntegrityViolationException e){
+            throw  new DataIntegrityViolationException(e.getMessage());
+        }
+
     }
 }

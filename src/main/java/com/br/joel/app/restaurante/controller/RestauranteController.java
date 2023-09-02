@@ -18,9 +18,11 @@ public class RestauranteController {
 
 
     private  final RestauranteServices restauranteServices;
+    private  final  RestauranteToModel restauranteToModel;
 
-    public RestauranteController(RestauranteServices restauranteServices) {
+    public RestauranteController(RestauranteServices restauranteServices, RestauranteToModel restauranteToModel) {
         this.restauranteServices = restauranteServices;
+        this.restauranteToModel = restauranteToModel;
     }
 
 
@@ -28,7 +30,7 @@ public class RestauranteController {
     public ResponseEntity<List<RestauranteDTO>> listar() {
         final  var listar = restauranteServices.listar();
 
-        return ResponseEntity.ok(RestauranteToModel.toModel(listar));
+        return ResponseEntity.ok(restauranteToModel.toModel(listar));
 
     }
 
@@ -36,16 +38,16 @@ public class RestauranteController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<RestauranteDTO> buscarPorId(@PathVariable  Long id) {
         Restaurante restaurante = restauranteServices.buscar(id);
-        return ResponseEntity.ok(RestauranteToModel.toModel(restaurante));
+        return ResponseEntity.ok(restauranteToModel.toModel(restaurante));
     }
 
 
 
     @PostMapping
     public ResponseEntity<RestauranteDTO> adicionar(@RequestBody @Valid RestauranteInput restaurante) {
-        final  var salvar = restauranteServices.salvar(RestauranteToModel.toEntity(restaurante));
+        final  var salvar = restauranteServices.salvar(restauranteToModel.toEntity(restaurante));
         try {
-            return  ResponseEntity.ok().body(RestauranteToModel.toModel(salvar));
+            return  ResponseEntity.ok().body(restauranteToModel.toModel(salvar));
         }catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -55,8 +57,8 @@ public class RestauranteController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<RestauranteDTO> atualizar(@PathVariable Long id, @RequestBody RestauranteInput restaurante) {
-        final  var atualizar = restauranteServices.atualizar(id, RestauranteToModel.toEntity(restaurante));
-        return ResponseEntity.ok().body(RestauranteToModel.toModel(atualizar));
+        final  var atualizar = restauranteServices.atualizar(id, restauranteToModel.toEntity(restaurante));
+        return ResponseEntity.ok().body(restauranteToModel.toModel(atualizar));
     }
 
     @DeleteMapping(value = "/{id}")
