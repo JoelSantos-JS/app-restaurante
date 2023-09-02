@@ -1,10 +1,10 @@
 package com.br.joel.app.restaurante.controller;
 
-import com.br.joel.app.restaurante.DTO.CozinhaDTO;
 import com.br.joel.app.restaurante.DTO.RestauranteDTO;
 import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
-import com.br.joel.app.restaurante.mapper.ToModel;
+import com.br.joel.app.restaurante.mapper.RestauranteToModel;
 import com.br.joel.app.restaurante.model.Restaurante;
+import com.br.joel.app.restaurante.model.input.RestauranteInput;
 import com.br.joel.app.restaurante.services.RestauranteServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class RestauranteController {
     public ResponseEntity<List<RestauranteDTO>> listar() {
         final  var listar = restauranteServices.listar();
 
-        return ResponseEntity.ok(ToModel.toModel(listar));
+        return ResponseEntity.ok(RestauranteToModel.toModel(listar));
 
     }
 
@@ -36,27 +36,27 @@ public class RestauranteController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<RestauranteDTO> buscarPorId(@PathVariable  Long id) {
         Restaurante restaurante = restauranteServices.buscar(id);
-        return ResponseEntity.ok(ToModel.toModel(restaurante));
+        return ResponseEntity.ok(RestauranteToModel.toModel(restaurante));
     }
 
 
 
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody @Valid Restaurante restaurante) {
-        final  var salvar = restauranteServices.salvar(restaurante);
+    public ResponseEntity<RestauranteDTO> adicionar(@RequestBody @Valid RestauranteInput restaurante) {
+        final  var salvar = restauranteServices.salvar(RestauranteToModel.toEntity(restaurante));
         try {
-            return  ResponseEntity.ok().body(ToModel.toModel(salvar));
+            return  ResponseEntity.ok().body(RestauranteToModel.toModel(salvar));
         }catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
 
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<RestauranteDTO> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-        final  var atualizar = restauranteServices.atualizar(id, restaurante);
-        return ResponseEntity.ok().body(ToModel.toModel(atualizar));
+    public ResponseEntity<RestauranteDTO> atualizar(@PathVariable Long id, @RequestBody RestauranteInput restaurante) {
+        final  var atualizar = restauranteServices.atualizar(id, RestauranteToModel.toEntity(restaurante));
+        return ResponseEntity.ok().body(RestauranteToModel.toModel(atualizar));
     }
 
     @DeleteMapping(value = "/{id}")
