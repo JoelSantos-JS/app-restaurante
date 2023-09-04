@@ -74,6 +74,20 @@ public class RestauranteServices implements RestauranteImpl {
         return restaurante1;
     }
 
+
+    @Transactional
+    public void  ativarRestaurante(long id) {
+        Restaurante restaurante = buscar(id);
+
+        restaurante.ativar();
+    }
+    @Transactional
+    public void  inativarRestaurante(long id) {
+        Restaurante restaurante = buscar(id);
+
+        restaurante.desativar();
+    }
+
     @Override
     @Transactional()
     public void remover(Long id) {

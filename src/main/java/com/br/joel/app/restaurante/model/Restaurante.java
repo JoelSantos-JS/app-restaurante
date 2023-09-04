@@ -82,5 +82,12 @@ public class Restaurante {
         this.cozinha = cozinha;
     }
 
+    public  void  ativar(){
+        setAtivo(true);
+    }
+    public  void  desativar() {
+        setAtivo(false);
+    }
+
 
 }

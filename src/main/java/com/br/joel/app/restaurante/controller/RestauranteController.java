@@ -6,6 +6,7 @@ import com.br.joel.app.restaurante.mapper.RestauranteToModel;
 import com.br.joel.app.restaurante.model.Restaurante;
 import com.br.joel.app.restaurante.model.input.RestauranteInput;
 import com.br.joel.app.restaurante.services.RestauranteServices;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +66,20 @@ public class RestauranteController {
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         restauranteServices.remover(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/ativar")
+    public  ResponseEntity<Void> ativar(@PathVariable Long id) {
+            restauranteServices.ativarRestaurante(id);
+
+        return  ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/desativar")
+    public  ResponseEntity<Void> desativar(@PathVariable Long id) {
+            restauranteServices.inativarRestaurante(id);
+
+        return  ResponseEntity.noContent().build();
     }
 
 
