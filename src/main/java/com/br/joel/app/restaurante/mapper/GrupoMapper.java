@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 @Component
 public class GrupoMapper {
@@ -19,7 +20,7 @@ public class GrupoMapper {
         return  mapper.map(grupo, GrupoDTO.class);
     }
 
-    public List<GrupoDTO> toModell(List<Grupo> grupo) {
+    public List<GrupoDTO> toModell(Collection<Grupo> grupo) {
         return grupo.stream().map(e -> toModell(e)).toList();
     }
 }

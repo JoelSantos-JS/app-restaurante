@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UsuarioServices implements UsuarioImpl {
 
@@ -29,6 +31,13 @@ public class UsuarioServices implements UsuarioImpl {
 
     @Override
     public Usuario salvar(Usuario usuario) {
+
+        Optional<Usuario> usuario1 = usuarioRepository.findByEmail(usuario.getEmail());
+
+        if(usuario1.isPresent() && !usuario1.get().equals(usuario)) {
+            throw new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST, "Email ja cadastrado");
+        }
+
         return usuarioRepository.save(usuario);
     }
 
@@ -46,25 +55,21 @@ public class UsuarioServices implements UsuarioImpl {
     }
 
 
-    public Usuario  atualizarSenha(Long id, UsuarioSenhaInput senha) {
+    public Usuario  atualizarSenha(Long id, UsuarioSenhaInput senha) throws Exception {
         Usuario usuario = buscar(id);
 
         if(usuario == null) {
             throw  new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST, "Id nao encontrado");
         }
-        final var senhaAtual =   usuario.getSenha().equals(senha.getSenha());
-        try {
-            if(senhaAtual == false) {
+        boolean senhaAtual =   usuario.getSenha().equals(senha.getSenha());
+
+            if(senhaAtual == false ) {
                 throw new Exception("Senha atual incorreta");
             }else {
                 usuario.setSenha(senha.getNovaSenha());
                 usuarioRepository.save(usuario);
             }
 
-        }catch (Exception e) {
-
-            throw  new EntidadeNaoEncontradaException(HttpStatus.BAD_REQUEST, "Falha ao altera senha");
-        }
 
         return  usuario;
 

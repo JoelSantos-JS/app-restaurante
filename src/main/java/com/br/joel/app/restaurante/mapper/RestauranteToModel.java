@@ -1,6 +1,7 @@
 package com.br.joel.app.restaurante.mapper;
 
 import com.br.joel.app.restaurante.DTO.CozinhaDTO;
+import com.br.joel.app.restaurante.DTO.ProdutoDTO;
 import com.br.joel.app.restaurante.DTO.RestauranteDTO;
 import com.br.joel.app.restaurante.model.Cozinha;
 import com.br.joel.app.restaurante.model.Restaurante;
@@ -22,6 +23,8 @@ public class RestauranteToModel {
 
         return modelMapper.map(restaurante,RestauranteDTO.class);
     }
+
+
 
     public  List<RestauranteDTO> toModel(List<Restaurante> restaurantes) {
         return restaurantes.stream().map(e -> toModel(e)).toList();

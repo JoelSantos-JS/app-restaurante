@@ -20,9 +20,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Data
@@ -59,17 +57,23 @@ public class Restaurante {
     private  Cozinha cozinha;
 
     @Embedded
-    @JsonIgnore
     private  Endereco endereco;
+
+    private   Boolean aberto;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn  (name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-    private List<FormaDePagamento> formaDePagamentos= new ArrayList<>();
+    private Set<FormaDePagamento> formaDePagamentos=new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "restaurante_usuario", joinColumns = @JoinColumn  (name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private  Set<Usuario> usuarios = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurante")
     @JsonIgnore
-    private  List<Produto> produtos = new ArrayList<>();
+    private List<Produto> produtos = new ArrayList<>();
 
 
     public  Restaurante(final Long id ,  final String nome, final  Boolean ativo , final  BigDecimal taxaFrete , Cozinha cozinha  ){
@@ -87,6 +91,14 @@ public class Restaurante {
     }
     public  void  desativar() {
         setAtivo(false);
+    }
+
+    public  void  aberto(){
+        setAberto(true);
+    }
+
+    public  void  fechado() {
+        setAberto(false);
     }
 
 

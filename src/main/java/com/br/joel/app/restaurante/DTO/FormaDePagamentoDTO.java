@@ -3,9 +3,8 @@ package com.br.joel.app.restaurante.DTO;
 import lombok.Data;
 
 @Data
-public class PermissaoDTO {
+public class FormaDePagamentoDTO {
 
-    private Long id;
-    private  String nome;
+    private  long id;
     private  String descricao;
 }

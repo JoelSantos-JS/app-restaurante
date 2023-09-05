@@ -3,7 +3,9 @@ package com.br.joel.app.restaurante.services;
 import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
 import com.br.joel.app.restaurante.mapper.RestauranteToModel;
 import com.br.joel.app.restaurante.model.Cozinha;
+import com.br.joel.app.restaurante.model.FormaDePagamento;
 import com.br.joel.app.restaurante.model.Restaurante;
+import com.br.joel.app.restaurante.model.Usuario;
 import com.br.joel.app.restaurante.repository.RestauranteRepository;
 import com.br.joel.app.restaurante.services.IMPL.RestauranteImpl;
 import org.springframework.beans.BeanUtils;
@@ -19,13 +21,18 @@ public class RestauranteServices implements RestauranteImpl {
     private  final RestauranteRepository repository;
     private  final CozinhaServices  cozinhaServices;
 
+    private  final  UsuarioServices usuarioServices;
+
+    private  final  FormaDePagamentoServices  formaDePagamentoServices;
 
     private  final RestauranteToModel model;
 
-    public RestauranteServices(RestauranteRepository repository, CozinhaServices cozinhaServices, RestauranteToModel model) {
+    public RestauranteServices(RestauranteRepository repository, CozinhaServices cozinhaServices, UsuarioServices usuarioServices, FormaDePagamentoServices formaDePagamentoServices, RestauranteToModel model) {
         this.repository = repository;
 
         this.cozinhaServices = cozinhaServices;
+        this.usuarioServices = usuarioServices;
+        this.formaDePagamentoServices = formaDePagamentoServices;
         this.model = model;
     }
     @Override
@@ -87,7 +94,69 @@ public class RestauranteServices implements RestauranteImpl {
 
         restaurante.desativar();
     }
+    @Transactional
+    public void  abrirRestaurante(long id) {
+        Restaurante restaurante = buscar(id);
 
+        restaurante.aberto();
+    }
+    @Transactional
+    public void  fecharRestaurante(long id) {
+        Restaurante restaurante = buscar(id);
+
+        restaurante.fechado();
+    }
+
+
+    @Transactional
+    public  void listarProdutos(Long restauranteId , Long  produtoId) {
+        Restaurante restaurante = buscar(restauranteId);
+
+
+
+    }
+
+    @Transactional
+    public void  desvincularFormaPagamento(Long restauranteId , Long formaDePagamentoId) {
+        Restaurante restaurante = buscar(restauranteId);
+        FormaDePagamento forma = formaDePagamentoServices.buscar(formaDePagamentoId);
+
+
+        restaurante.getFormaDePagamentos().remove(forma);
+
+
+    }
+    @Transactional
+    public void  associarFormaPagamento(Long restauranteId , Long formaDePagamentoId) {
+        Restaurante restaurante = buscar(restauranteId);
+        FormaDePagamento forma = formaDePagamentoServices.buscar(formaDePagamentoId);
+
+
+        restaurante.getFormaDePagamentos().add(forma);
+
+
+    }
+
+    @Transactional
+    public void  desvincularRestaurante(Long restauranteId , Long usuarioId) {
+        Restaurante restaurante = buscar(restauranteId);
+        Usuario usuario = usuarioServices.buscar(usuarioId);
+
+
+        restaurante.getUsuarios().remove(usuario);
+
+
+    }
+    @Transactional
+    public void  associarRestaurante(Long restauranteId , Long usuarioId) {
+        Restaurante restaurante = buscar(restauranteId);
+        Usuario usuario = usuarioServices.buscar(usuarioId);
+
+
+        restaurante.getUsuarios().add(usuario);
+
+
+    }
     @Override
     @Transactional()
     public void remover(Long id) {

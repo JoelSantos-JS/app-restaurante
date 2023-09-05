@@ -57,7 +57,7 @@ public class UsuarioController {
     }
 
     @PutMapping(value = "/{id}/senha")
-    public ResponseEntity<UsuarioSenhaInput> updatePassword(@PathVariable Long id, @RequestBody UsuarioSenhaInput usuario) {
+    public ResponseEntity<UsuarioSenhaInput> updatePassword(@PathVariable Long id, @RequestBody UsuarioSenhaInput usuario) throws Exception {
         final  var update =  services.atualizarSenha(id, usuario);
         mapper.toSenha(update);
         return ResponseEntity.ok().build();
