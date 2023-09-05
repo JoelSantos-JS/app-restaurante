@@ -32,7 +32,7 @@ public class Pedido {
     private Instant dataEntrega;
 
     @Enumerated(EnumType.STRING)
-    private   StatusPedido status;
+    private   StatusPedido status = StatusPedido.CRIADO;
 
     @Embedded
     private  Endereco endereco;
@@ -43,8 +43,8 @@ public class Pedido {
     @ManyToOne()
     private  Usuario usuario;
 
-    @OneToMany(mappedBy = "pedido")
-    private  List<FormaDePagamento> formaDePagamentos = new ArrayList<>();
+    @ManyToOne
+    private  FormaDePagamento formaDePagamentos;
 
 
 

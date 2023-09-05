@@ -95,6 +95,14 @@ public class RestauranteServices implements RestauranteImpl {
         restaurante.desativar();
     }
     @Transactional
+    public void  ativarRestaurante(List<Long> ids) {
+        ids.forEach(id -> ativarRestaurante(id));
+    }
+    @Transactional
+    public void inativarRestaurante(List<Long> ids) {
+        ids.forEach(id -> inativarRestaurante(id));
+    }
+    @Transactional
     public void  abrirRestaurante(long id) {
         Restaurante restaurante = buscar(id);
 

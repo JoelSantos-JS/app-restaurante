@@ -19,6 +19,4 @@ public class FormaDePagamento {
     @Column(nullable = false)
     private String descricao;
 
-    @ManyToOne()
-    private  Pedido  pedido;
 }

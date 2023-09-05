@@ -118,6 +118,13 @@ public class RestauranteController {
 
         return  ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/ativacao")
+    public  ResponseEntity<Void> ativacao(@RequestBody List<Long> ids) {
+            restauranteServices.ativarRestaurante(ids);
+
+        return  ResponseEntity.noContent().build();
+    }
     @GetMapping("/{id}/aberto")
     public  ResponseEntity<Void> abrir(@PathVariable Long id) {
             restauranteServices.abrirRestaurante(id);
@@ -133,6 +140,13 @@ public class RestauranteController {
 
     @PutMapping("/{id}/desativar")
     public  ResponseEntity<Void> desativar(@PathVariable Long id) {
+            restauranteServices.inativarRestaurante(id);
+
+        return  ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/desativacao")
+    public  ResponseEntity<Void> desativacao(@RequestBody List<Long> id) {
             restauranteServices.inativarRestaurante(id);
 
         return  ResponseEntity.noContent().build();

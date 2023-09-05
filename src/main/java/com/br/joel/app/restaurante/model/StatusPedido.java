@@ -7,5 +7,7 @@ public enum StatusPedido {
 
     ENTREGUE,
 
+    PROCESSANDO,
+
     CANCELADO
 }
