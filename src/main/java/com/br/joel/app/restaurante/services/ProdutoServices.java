@@ -1,6 +1,7 @@
 package com.br.joel.app.restaurante.services;
 
 import com.br.joel.app.restaurante.model.Produto;
+import com.br.joel.app.restaurante.repository.PedidoRepository;
 import com.br.joel.app.restaurante.repository.ProdutoRepository;
 import com.br.joel.app.restaurante.services.IMPL.ProdutoImpl;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,7 @@ import java.util.List;
 public class ProdutoServices implements ProdutoImpl {
 
     private  final ProdutoRepository repository;
+
 
     public ProdutoServices(ProdutoRepository repository) {
         this.repository = repository;
@@ -25,6 +27,10 @@ public class ProdutoServices implements ProdutoImpl {
     @Override
     public Produto buscar(Long id) {
         return repository.findById(id).orElse(null);
+    }
+    public Produto  buscar(Long id , Long id1 ){
+
+        return repository.findById(id, id1).orElse(null);
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class PedidoDTO {
 
-    private  Long id;
+    private  String codigo;
 
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
@@ -29,8 +29,8 @@ public class PedidoDTO {
     private RestauranteDTO restaurante;
 
 
-    private UsuariosDTO usuario;
-
 
     private FormaDePagamentoDTO formaDePagamentos;
+
+    private List<ItemPedidoDTO> items = new ArrayList<>();
 }

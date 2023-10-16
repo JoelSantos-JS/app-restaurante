@@ -1,5 +1,6 @@
 package com.br.joel.app.restaurante.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity()
 @Data
@@ -21,6 +21,8 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
+
+    private  String codigo = UUID.randomUUID().toString();
 
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
@@ -43,8 +45,26 @@ public class Pedido {
     @ManyToOne()
     private  Usuario usuario;
 
+
+
     @ManyToOne
     private  FormaDePagamento formaDePagamentos;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> items = new ArrayList<>();
+
+
+
+    public void calcularPrecoFinal() {
+        getItems().forEach(ItemPedido::calcularPrecoTotal);
+
+        this.subtotal = getItems().stream()
+                .map(item -> item.getPrecoTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valorTotal = this.subtotal.add(this.taxaFrete);
+    }
+
 
 
 

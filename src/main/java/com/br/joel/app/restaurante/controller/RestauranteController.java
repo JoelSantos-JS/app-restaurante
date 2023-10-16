@@ -3,10 +3,12 @@ package com.br.joel.app.restaurante.controller;
 import com.br.joel.app.restaurante.DTO.ProdutoDTO;
 import com.br.joel.app.restaurante.DTO.RestauranteDTO;
 import com.br.joel.app.restaurante.exceptions.EntidadeNaoEncontradaException;
+import com.br.joel.app.restaurante.mapper.ProdutoMapper;
 import com.br.joel.app.restaurante.mapper.RestauranteToModel;
 import com.br.joel.app.restaurante.model.Produto;
 import com.br.joel.app.restaurante.model.Restaurante;
 import com.br.joel.app.restaurante.model.input.RestauranteInput;
+import com.br.joel.app.restaurante.repository.ProdutoRepository;
 import com.br.joel.app.restaurante.services.ProdutoServices;
 import com.br.joel.app.restaurante.services.RestauranteServices;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -26,11 +26,16 @@ public class RestauranteController {
     private  final RestauranteServices restauranteServices;
     private  final  RestauranteToModel restauranteToModel;
 
+    private final ProdutoRepository repository;
+
+    private  final ProdutoMapper mapper;
     private  final ProdutoServices produtoServices;
 
-    public RestauranteController(RestauranteServices restauranteServices, RestauranteToModel restauranteToModel, ProdutoServices produtoServices) {
+    public RestauranteController(RestauranteServices restauranteServices, RestauranteToModel restauranteToModel, ProdutoRepository repository, ProdutoMapper mapper, ProdutoServices produtoServices) {
         this.restauranteServices = restauranteServices;
         this.restauranteToModel = restauranteToModel;
+        this.repository = repository;
+        this.mapper = mapper;
         this.produtoServices = produtoServices;
     }
 
@@ -58,11 +63,8 @@ public class RestauranteController {
             return ResponseEntity.notFound().build();
         }
 
-        List<ProdutoDTO> produtos = restaurante.getProdutos().stream()
-                .map(produto -> new ProdutoDTO(produto)) // Substitua "ProdutoDTO" pelo nome da sua classe DTO
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(produtos);
+         List<Produto> produtos = repository.findAtivosByRestaurante(restaurante).get();
+        return ResponseEntity.ok(mapper.toProdutoDTO(produtos));
     }
     @GetMapping(value = "/{id}/produtos/{produtoId}")
     public ResponseEntity<ProdutoDTO> buscarProdutoPorRestauranteEProdutoId(@PathVariable Long id, @PathVariable Long produtoId) {

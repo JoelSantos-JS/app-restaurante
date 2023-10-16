@@ -1,13 +1,19 @@
 package com.br.joel.app.restaurante.controller;
 
 import com.br.joel.app.restaurante.DTO.PedidoDTO;
+import com.br.joel.app.restaurante.DTO.PedidoFilter;
+import com.br.joel.app.restaurante.DTO.PedidoResumoDTO;
 import com.br.joel.app.restaurante.mapper.PedidoMapper;
 import com.br.joel.app.restaurante.model.Pedido;
+import com.br.joel.app.restaurante.repository.PedidoRepository;
 import com.br.joel.app.restaurante.services.PedidoServices;
+import com.br.joel.app.restaurante.spec.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -17,15 +23,25 @@ public class PedidoController {
     @Autowired
     private PedidoServices  pedidoServices;
 
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
 
     @Autowired
     private PedidoMapper mapper;
 
 
+    @GetMapping(value = "/search/codigo/{codigo}")
+    public ResponseEntity<PedidoDTO> buscarPorCodigo(@PathVariable(value = "codigo") String codigo) {
+        final var pedido = pedidoServices.buscarPorCodigo(codigo);
+        return ResponseEntity.ok().body(mapper.toDTO(pedido));
+    }
+
+
     @GetMapping
-    public ResponseEntity<List<PedidoDTO>> listar(){
-        final  var listar= pedidoServices.listar();
-        return  ResponseEntity.ok().body(mapper.toDTO(listar));
+    public ResponseEntity<List<PedidoResumoDTO>> listar(PedidoFilter pedidoFilter , Pageable pageable){
+        final  var listar= mapper.toResumoDTO( pedidoRepository.findAll(PedidoSpecs.usandoFilto(pedidoFilter)) ,pageable );
+        return  ResponseEntity.ok().body(listar);
     }
 
 
@@ -37,11 +53,10 @@ public class PedidoController {
     }
 
     @PostMapping
+    public ResponseEntity<PedidoResumoDTO> salvar(@RequestBody PedidoResumoDTO pedidoDTO){
+        final  var pedido= pedidoServices.salvar(mapper.toEntity(pedidoDTO));
 
-    public ResponseEntity<PedidoDTO> salvar(@RequestBody  Pedido pedidoDTO){
-        final  var pedido= pedidoServices.salvar(pedidoDTO);
-
-        return  ResponseEntity.ok().body(mapper.toDTO(pedido));
+        return  ResponseEntity.ok().body(mapper.toResumoDTO(pedido));
     }
 
 
